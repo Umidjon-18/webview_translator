@@ -71,11 +71,19 @@ class _WebViewPageState extends State<WebViewPage> {
                     },
                     onProgress: (url) {
                       progress();
-                      ctrl.evaluateJavascript(jsCode);
+                      // ctrl.evaluateJavascript(jsCode);
+                    },
+                    navigationDelegate: (navigation) {
+                      log(navigation.url);
+                      if (navigation.url.contains('.translate.goog')) {
+                        log('salom');
+                      }
+
+                      return NavigationDecision.navigate;
                     },
                     onPageFinished: (url) {
                       finished();
-                      ctrl.evaluateJavascript(jsCode);
+                      // ctrl.evaluateJavascript(jsCode);
                     },
                   ),
                   Visibility(
@@ -93,6 +101,33 @@ class _WebViewPageState extends State<WebViewPage> {
           ],
         ),
       ),
+    );
+  }
+
+  WebView webViewMetod() {
+    return WebView(
+      userAgent: userAgent,
+      javascriptMode: JavascriptMode.unrestricted,
+      initialUrl: mainUrl,
+      onWebViewCreated: (controller) {
+        ctrl = controller;
+      },
+      onProgress: (url) {
+        progress();
+        // ctrl.evaluateJavascript(jsCode);
+      },
+      navigationDelegate: (navigation) {
+        log(navigation.url);
+        if (navigation.url.contains('.translate.goog')) {
+          log('salom');
+        }
+
+        return NavigationDecision.navigate;
+      },
+      onPageFinished: (url) {
+        finished();
+        // ctrl.evaluateJavascript(jsCode);
+      },
     );
   }
 }

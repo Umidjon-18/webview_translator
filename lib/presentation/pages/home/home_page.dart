@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late TextEditingController textEditingController = TextEditingController()..text = "simpl.uz";
+late TextEditingController textEditingController = TextEditingController()..text = "hepsiburada.com";
   final GlobalKey<ScaffoldState> key = GlobalKey();
   String fromLanguage = languages[0]["code"];
   String toLanguage = languages[41]["code"];
