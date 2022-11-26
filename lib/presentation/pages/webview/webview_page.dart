@@ -6,7 +6,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_translator/config/link_converter.dart';
 import 'package:webview_translator/presentation/pages/home/home_page.dart';
 
-import '../../../config/constants.dart';
 
 dynamic ctrl;
 
@@ -98,7 +97,7 @@ class _WebViewPageState extends State<WebViewPage> {
                     onProgress: (url) async {
                       // log(await ctrl.currentUrl());
                       progress();
-                      // ctrl.evaluateJavascript(jsCode);
+                      ctrl.evaluateJavascript(jsCode);
                     },
                     navigationDelegate: (navigation) {
                       log(navigation.url);
@@ -112,7 +111,7 @@ class _WebViewPageState extends State<WebViewPage> {
                     },
                     onPageFinished: (url) {
                       finished();
-                      // ctrl.evaluateJavascript(jsCode);
+                      ctrl.evaluateJavascript(jsCode);
                     },
                   ),
                 ],
