@@ -203,7 +203,7 @@ class _HomePageState extends State<HomePage> {
           newUrl.add(urlList[i]);
         }
       }
-      var headString = (text.contains("https://")|| text.contains("www.")) ? "" : "https://";
+      var headString = (text.contains("https://")|| text.contains("www.")) ? "" :  "https://";
       var routeUrl =
           "$headString${newUrl.join("")}${hasQuestion ? "&" : "?"}_x_tr_sl=$fromLanguage&_x_tr_tl=$toLanguage&_x_tr_hl=$toLanguage&_x_tr_pto=wapp";
 

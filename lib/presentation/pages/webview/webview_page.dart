@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_translator/main.dart';
 
 dynamic ctrl;
 
@@ -45,6 +47,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    log(mainUrl);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
