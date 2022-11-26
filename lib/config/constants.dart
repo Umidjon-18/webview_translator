@@ -185,3 +185,5 @@ List languages = [
   {"code": "za", "name": "Zhuang, Chuang"},
   {"code": "zu", "name": "Zulu"}
 ];
+
+String globalLastWebsite = "hepsiburada.com";

@@ -6,12 +6,13 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_translator/config/link_converter.dart';
 import 'package:webview_translator/presentation/pages/home/home_page.dart';
 
+import '../../../config/constants.dart';
+
 dynamic ctrl;
 
 class WebViewPage extends StatefulWidget {
-  const WebViewPage({super.key, required this.url, required this.lastWebsite});
+  const WebViewPage({super.key, required this.url});
   final String url;
-  final String lastWebsite;
 
   @override
   State<WebViewPage> createState() => _WebViewPageState();
@@ -57,7 +58,7 @@ class _WebViewPageState extends State<WebViewPage> {
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(lastWebsite: widget.lastWebsite),
+              builder: (context) => const HomePage(),
             ),
           ),
           icon: const Icon(Icons.arrow_back),

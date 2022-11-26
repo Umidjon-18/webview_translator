@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:webview_translator/presentation/pages/webview/webview_page.dart';
 
+
+
 void linkConverter(String text, String fromLanguage, String toLanguage, BuildContext context) {
   if (text.isNotEmpty) {
     bool leftDot = false;
@@ -30,7 +32,7 @@ void linkConverter(String text, String fromLanguage, String toLanguage, BuildCon
         "$headString${newUrl.join("")}${hasQuestion ? "&" : "?"}_x_tr_sl=$fromLanguage&_x_tr_tl=$toLanguage&_x_tr_hl=$toLanguage&_x_tr_pto=wapp";
 
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-      return WebViewPage(url: routeUrl, lastWebsite: text);
+      return WebViewPage(url: routeUrl);
     }));
   }
 }

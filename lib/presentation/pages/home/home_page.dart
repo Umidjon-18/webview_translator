@@ -5,15 +5,14 @@ import 'package:webview_translator/config/link_converter.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  HomePage({super.key, required this.lastWebsite});
-  String lastWebsite;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late TextEditingController textEditingController = TextEditingController()..text = widget.lastWebsite;
+  late TextEditingController textEditingController = TextEditingController()..text = globalLastWebsite;
   final GlobalKey<ScaffoldState> key = GlobalKey();
   String fromLanguage = languages[164]["code"];
   String toLanguage = languages[134]["code"];
@@ -46,6 +45,9 @@ class _HomePageState extends State<HomePage> {
                 autocorrect: false,
                 textAlignVertical: TextAlignVertical.center,
                 controller: textEditingController,
+                onChanged: (value) {
+                  globalLastWebsite = value;
+                },
                 decoration: InputDecoration(
                   hintText: 'Enter the link',
                   hintStyle: const TextStyle(color: Colors.black26),
