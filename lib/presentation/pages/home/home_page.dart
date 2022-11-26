@@ -6,7 +6,6 @@ import '../webview/webview_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-  static const String id = "home_page";
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,18 +13,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late TextEditingController textEditingController = TextEditingController()..text = "simpl.uz";
-  //
+  final GlobalKey<ScaffoldState> key = GlobalKey();
+  String fromLanguage = languages[0]["code"];
+  String toLanguage = languages[41]["code"];
 
   @override
   void dispose() {
     textEditingController.dispose();
     super.dispose();
   }
-
-  final GlobalKey<ScaffoldState> key = GlobalKey();
-
-  String fromLanguage = languages[0]["code"];
-  String toLanguage = languages[41]["code"];
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     icon: Icon(
                       CupertinoIcons.clear_thick,
-                      color: textEditingController.text.isNotEmpty ? Colors.black.withOpacity(.5) : Colors.transparent,
+                      color: Colors.black.withOpacity(.5),
                     ),
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
@@ -199,19 +195,15 @@ class _HomePageState extends State<HomePage> {
         if (urlList[i] == "?") {
           hasQuestion = true;
         }
-        if (urlList[i] == "." && urlList[i + 1] != "h") {
+        if (urlList[i] == ".") {
           newUrl.add("-");
-        } else if (urlList[i] == "/" && leftDot) {
+        } else if (urlList[i] == "/" && leftDot && !newUrl.contains(".translate.goog/")) {
           newUrl.add(".translate.goog/");
         } else {
           newUrl.add(urlList[i]);
         }
       }
-      var headString = text.contains("https://www.")
-          ? ""
-          : text.contains("www.")
-              ? "https://"
-              : "https://www-";
+      var headString = (text.contains("https://")|| text.contains("www.")) ? "" : "https://";
       var routeUrl =
           "$headString${newUrl.join("")}${hasQuestion ? "&" : "?"}_x_tr_sl=$fromLanguage&_x_tr_tl=$toLanguage&_x_tr_hl=$toLanguage&_x_tr_pto=wapp";
 

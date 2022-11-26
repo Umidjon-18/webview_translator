@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ dynamic ctrl;
 
 class WebViewPage extends StatefulWidget {
   const WebViewPage({super.key, required this.url});
-  static const String id = "webview_page";
   final String url;
 
   @override
@@ -16,27 +14,39 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
+  bool isVisible = true;
+  late String mainUrl = widget.url;
+  late String appBarText = widget.url;
+
+  String jsCode = "document.getElementById('gt-nvframe').style.display='none';";
+
+  String userAgent =
+      "Mozilla/5.0 (Linux; U; Android 4.4.2; en-us; SCH-I535 Build/KOT49H) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30";
+
   @override
   void initState() {
     super.initState();
     if (Platform.isAndroid) {
       WebView.platform = AndroidWebView();
     }
-    Timer(
-      const Duration(seconds: 4),
-      () => setState(() {
-        isVisible = false;
-      }),
-    );
   }
 
-  late String mainUrl = widget.url;
-  late String appBarText = widget.url;
-  bool isVisible = true;
+  void progress() {
+    setState(() {
+      isVisible = true;
+    });
+  }
+
+  void finished() {
+    setState(() {
+      isVisible = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Simpl Solution", style: TextStyle(fontSize: 20)),
@@ -50,23 +60,27 @@ class _WebViewPageState extends State<WebViewPage> {
               child: Stack(
                 children: [
                   WebView(
+                    userAgent: userAgent,
                     javascriptMode: JavascriptMode.unrestricted,
                     initialUrl: mainUrl,
                     onWebViewCreated: (controller) {
                       ctrl = controller;
                     },
                     onProgress: (url) {
-                      ctrl.evaluateJavascript("document.getElementById('gt-nvframe').style.display='none';");
+                      progress();
+                      ctrl.evaluateJavascript(jsCode);
                     },
                     onPageFinished: (url) {
-                      ctrl.evaluateJavascript("document.getElementById('gt-nvframe').style.display='none';");
+                      finished();
+                      ctrl.evaluateJavascript(jsCode);
                     },
                   ),
                   Visibility(
                     visible: isVisible,
                     child: const Center(
                       child: CupertinoActivityIndicator(
-                        radius: 20,
+                        radius: 15,
+                        color: Colors.black,
                       ),
                     ),
                   ),
