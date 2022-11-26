@@ -2,7 +2,7 @@
     package="com.example.webview_translator">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="Website Translator"
+        android:label="SalesLang"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

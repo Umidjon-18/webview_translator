@@ -3,13 +3,15 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_translator/main.dart';
+import 'package:webview_translator/config/link_converter.dart';
+import 'package:webview_translator/presentation/pages/home/home_page.dart';
 
 dynamic ctrl;
 
 class WebViewPage extends StatefulWidget {
-  const WebViewPage({super.key, required this.url});
+  const WebViewPage({super.key, required this.url, required this.lastWebsite});
   final String url;
+  final String lastWebsite;
 
   @override
   State<WebViewPage> createState() => _WebViewPageState();
@@ -47,12 +49,34 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    // log(mainUrl);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(lastWebsite: widget.lastWebsite),
+            ),
+          ),
+          icon: const Icon(Icons.arrow_back),
+        ),
         title: const Text("Simpl Solution", style: TextStyle(fontSize: 20)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Visibility(
+              visible: isVisible,
+              child: const Center(
+                child: CupertinoActivityIndicator(
+                  radius: 12,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         top: false,
@@ -66,26 +90,29 @@ class _WebViewPageState extends State<WebViewPage> {
                     userAgent: userAgent,
                     javascriptMode: JavascriptMode.unrestricted,
                     initialUrl: mainUrl,
-                    onWebViewCreated: (controller) {
+                    onWebViewCreated: (controller) async {
                       ctrl = controller;
+                      controller.clearCache();
                     },
-                    onProgress: (url) {
+                    onProgress: (url) async {
+                      // log(await ctrl.currentUrl());
                       progress();
-                      ctrl.evaluateJavascript(jsCode);
+                      // ctrl.evaluateJavascript(jsCode);
+                    },
+                    navigationDelegate: (navigation) {
+                      log(navigation.url);
+
+                      if (!navigation.url.contains(".translate.goog")) {
+                        linkConverter(navigation.url, "auto", "ru", context);
+                        return NavigationDecision.navigate;
+                      } else {
+                        return NavigationDecision.navigate;
+                      }
                     },
                     onPageFinished: (url) {
                       finished();
-                      ctrl.evaluateJavascript(jsCode);
+                      // ctrl.evaluateJavascript(jsCode);
                     },
-                  ),
-                  Visibility(
-                    visible: isVisible,
-                    child: const Center(
-                      child: CupertinoActivityIndicator(
-                        radius: 15,
-                        color: Colors.black,
-                      ),
-                    ),
                   ),
                 ],
               ),

@@ -1,21 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_translator/config/constants.dart';
+import 'package:webview_translator/config/link_converter.dart';
 
-import '../webview/webview_page.dart';
-
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key, required this.lastWebsite});
+  String lastWebsite;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late TextEditingController textEditingController = TextEditingController()..text = "simpl.uz";
+  late TextEditingController textEditingController = TextEditingController()..text = widget.lastWebsite;
   final GlobalKey<ScaffoldState> key = GlobalKey();
-  String fromLanguage = languages[0]["code"];
-  String toLanguage = languages[41]["code"];
+  String fromLanguage = languages[164]["code"];
+  String toLanguage = languages[134]["code"];
 
   @override
   void dispose() {
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                 controller: textEditingController,
                 decoration: InputDecoration(
                   hintText: 'Enter the link',
-                  hintStyle: const TextStyle(color: Colors.black54),
+                  hintStyle: const TextStyle(color: Colors.black26),
                   border: InputBorder.none,
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -147,7 +148,8 @@ class _HomePageState extends State<HomePage> {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      fetchWebsite(textEditingController.text);
+                      linkConverter(textEditingController.text, fromLanguage, toLanguage, context);
+
                       key.currentState!.closeEndDrawer();
                     },
                     child: Container(
@@ -166,7 +168,9 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => fetchWebsite(textEditingController.text),
+          onPressed: () {
+            linkConverter(textEditingController.text, fromLanguage, toLanguage, context);
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             child: const Text(
@@ -177,44 +181,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  fetchWebsite(String text) {
-    if (text.isNotEmpty) {
-      bool leftDot = false;
-      bool hasQuestion = false;
-      var urlList = text.split("");
-      var newUrl = [];
-      if (urlList.last != "/" && !text.contains(".htm")) {
-        urlList.add('/');
-      }
-      for (var i = 0; i < urlList.length; i++) {
-        if (urlList[i] == ".") {
-          leftDot = true;
-        }
-        if (urlList[i] == "?") {
-          hasQuestion = true;
-        }
-        if (urlList[i] == ".") {
-          newUrl.add("-");
-        } else if (urlList[i] == "/" && leftDot && !newUrl.contains(".translate.goog/")) {
-          newUrl.add(".translate.goog/");
-        } else {
-          newUrl.add(urlList[i]);
-        }
-      }
-      var headString = (text.contains("https://")|| text.contains("www.")) ? "" :  "https://";
-      var routeUrl =
-          "$headString${newUrl.join("")}${hasQuestion ? "&" : "?"}_x_tr_sl=$fromLanguage&_x_tr_tl=$toLanguage&_x_tr_hl=$toLanguage&_x_tr_pto=wapp";
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => WebViewPage(
-            url: routeUrl,
-          ),
-        ),
-      );
-    }
   }
 }
