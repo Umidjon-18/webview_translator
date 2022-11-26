@@ -47,7 +47,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    log(mainUrl);
+    // log(mainUrl);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
